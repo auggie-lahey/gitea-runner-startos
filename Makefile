@@ -31,8 +31,8 @@ clean:
 	rm -f $(PKG_ID).s9pk
 	rm -f scripts/*.js
 
-# scripts/embassy.js: $(TS_FILES)
-# 	deno run --allow-read --allow-write --allow-env --allow-net scripts/bundle.ts
+scripts/embassy.js: $(TS_FILES)
+	deno run --allow-read --allow-write --allow-env --allow-net scripts/embassy.ts
 
 docker-images/x86_64.tar: Dockerfile docker_entrypoint.sh
 ifeq ($(ARCH),aarch64)
@@ -48,7 +48,7 @@ else
 	docker buildx build --tag start9/$(PKG_ID)/main:$(PKG_VERSION) --platform=linux/arm64 -o type=docker,dest=docker-images/aarch64.tar .
 endif
 
-$(PKG_ID).s9pk: manifest.yaml instructions.md LICENSE icon.png docker-images/aarch64.tar docker-images/x86_64.tar
+$(PKG_ID).s9pk: manifest.yaml instructions.md LICENSE icon.png scripts/embassy.js docker-images/aarch64.tar docker-images/x86_64.tar
 ifeq ($(ARCH),aarch64)
 	@echo "start-sdk: Preparing aarch64 package ..."
 else ifeq ($(ARCH),x86_64)

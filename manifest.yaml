@@ -30,20 +30,17 @@ hardware-requirements:
     - x86_64
     - aarch64
 health-checks:
-  web:
-    name: Web & Git HTTP Tor Interfaces
-    success-message: Gitea is ready to be visited in a web browser and git can be used with SSH over TOR.
+  web-ui:
+    name: Web Interface
+    success-message: The RoboSats UI is ready
     type: script
-  user-signups-off:
-    name: User Signups Off
-    type: script
-config:
-  get:
-    type: script
-  set:
-    type: script
-properties:
-  type: script
+config: ~
+  # get:
+  #   type: script
+  # set:
+  #   type: script
+# properties:
+#   type: script
 dependencies: {}
 volumes:
   main:
@@ -96,12 +93,12 @@ backup:
       BACKUP: /mnt/backup
       main: /root/data
     io-format: yaml
-migrations:
-  from:
-    "*":
-      type: script
-      args: ["from"]
-  to:
-    "*":
-      type: script
-      args: ["to"]
+# migrations:
+#   from:
+#     "*":
+#       type: script
+#       args: ["from"]
+#   to:
+#     "*":
+#       type: script
+#       args: ["to"]
