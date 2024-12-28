@@ -1,12 +1,9 @@
-FROM gitea/act_runner:latest
+FROM gitea/act_runner:nightly
 
-ENV APP_HOST giteadev.embassy
-ENV APP_PORT 12596
-ENV TOR_PROXY_IP embassy
-ENV TOR_PROXY_PORT 9050
-ENV GITEA_INSTANCE_URL=https://x63zddjmr3gg64sltefxkmvsja2dqcuhkgjii3cjzu74uu4iqsfrxhad.local
-ENV GITEA_RUNNER_REGISTRATION_TOKEN=AbwkDreRgq0sKbdxD08QXdMuzGEOpk13OetxCu37
-
+ARG PLATFORM
 ADD ./docker_entrypoint.sh /usr/local/bin/docker_entrypoint.sh
-# RUN chmod a+x /usr/local/bin/*.sh
-# RUN chmod a+x *.sh
+ADD ./config.yaml /usr/local/config.yaml
+ENV CONFIG_FILE=/usr/local/config.yaml
+RUN apk add --no-cache tini nodejs curl
+RUN curl -sLo /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${PLATFORM}
+RUN chmod +x /usr/local/bin/yq

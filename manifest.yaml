@@ -2,19 +2,17 @@ id: gitearunner
 title: "GiteaRunner"
 version: 1.22.6
 release-notes: |
-  * Upstream code update
-  * Update bundling process to use Deno emit module
-  * Full list of upstream changes available [here](https://github.com/go-gitea/gitea/compare/v1.22.0...v1.22.6)
+  * init
 license: MIT
 wrapper-repo: "https://github.com/auggie-lahey/gitea-runner-startos"
-upstream-repo: "https://github.com/go-gitea/gitea"
-support-site: "https://docs.gitea.io/en-us/"
+upstream-repo: "https://gitea.com/gitea/act_runner"
+support-site: "https://docs.gitea.com/usage/actions/act-runner"
 marketing-site: "https://gitea.io/en-us/"
 build: ["make"]
 description:
-  short: A painless self-hosted Git service.
+  short: Actions for gitea.
   long: |
-    Gitea is a community managed lightweight code hosting solution written in Go. It is published under the MIT license.
+    Selfhosted runner for pipelines in gitea
 assets:
   license: LICENSE
   icon: icon.png
@@ -24,7 +22,8 @@ main:
   image: main
   entrypoint: "/usr/local/bin/docker_entrypoint.sh"
   mounts:
-    main: /data
+    main: /root/data
+    data: /data
 hardware-requirements:
   arch:
     - x86_64
@@ -32,18 +31,19 @@ hardware-requirements:
 health-checks:
   web-ui:
     name: Web Interface
-    success-message: The RoboSats UI is ready
+    success-message: The runner is ready
     type: script
-config: ~
-  # get:
-  #   type: script
-  # set:
-  #   type: script
-# properties:
-#   type: script
+config: 
+  get:
+    type: script
+  set:
+    type: script
+properties: ~
 dependencies: {}
 volumes:
   main:
+    type: data
+  data:
     type: data
 interfaces:
   main:
@@ -93,12 +93,12 @@ backup:
       BACKUP: /mnt/backup
       main: /root/data
     io-format: yaml
-# migrations:
-#   from:
-#     "*":
-#       type: script
-#       args: ["from"]
-#   to:
-#     "*":
-#       type: script
-#       args: ["to"]
+migrations:
+  from:
+    "*":
+      type: script
+      args: ["from"]
+  to:
+    "*":
+      type: script
+      args: ["to"]
